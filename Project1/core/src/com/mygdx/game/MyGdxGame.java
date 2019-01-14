@@ -35,7 +35,7 @@ public class MyGdxGame extends ApplicationAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         // Implement a time based interval from TomGrill
-        //
+        //https://badlogicgames.com/forum/viewtopic.php?f=11&t=21159
 	    long newTime = System.nanoTime();
 	    long frameTime = newTime - currentTime;
         long nanoPersLogicTick = 250000000;
