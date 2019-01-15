@@ -16,8 +16,8 @@ public class MyGdxGame extends ApplicationAdapter {
     private int Y = 0;
 
     // Speed/direction for sprite
-    private int DX = 50;
-    private int DY = 25;
+    private int DX = 5;
+    private int DY = 2;
 
     private long currentTime = System.nanoTime();
     private long accumulator;
@@ -38,18 +38,18 @@ public class MyGdxGame extends ApplicationAdapter {
         //https://badlogicgames.com/forum/viewtopic.php?f=11&t=21159
 	    long newTime = System.nanoTime();
 	    long frameTime = newTime - currentTime;
-        long nanoPersLogicTick = 250000000;
+        long nanosPerLogicTick = 25000000;
 
         // Prevent overflow (infinite while loop)
-	    if (frameTime > nanoPersLogicTick) {
-	        frameTime = nanoPersLogicTick;
+	    if (frameTime > nanosPerLogicTick) {
+	        frameTime = nanosPerLogicTick;
         }
 
         currentTime = newTime;
 	    accumulator += frameTime;
 
 	    // Checks whether it has been a change in deltatime
-	    while (accumulator >= nanoPersLogicTick) {
+	    while (accumulator >= nanosPerLogicTick) {
 
 	        // Checks for sprite bouncing the Vertical walls (spritelength = 162px)
 	        if (X >= Gdx.graphics.getWidth() - 162 || X < 0) {
@@ -67,7 +67,7 @@ public class MyGdxGame extends ApplicationAdapter {
             X += DX;
 	        Y += DY;
 
-	        accumulator -= nanoPersLogicTick;
+	        accumulator -= nanosPerLogicTick;
         }
 
 		// Convert to sprite and flip the image based on direction
