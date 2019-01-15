@@ -6,10 +6,18 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 
 public class MyGdxGame extends ApplicationAdapter {
 	private SpriteBatch batch;
     private Texture img;
+
+	private Stage stage;
+    private Touchpad touchpad;
+    private Skin skin;
+    Controller controller;
 
     // Coordinates of sprite/img
     private int X = 0;
@@ -21,11 +29,19 @@ public class MyGdxGame extends ApplicationAdapter {
 
     private long currentTime = System.nanoTime();
     private long accumulator;
-	
+
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
 		img = new Texture("heli1.png"); // Replace with heli img
+
+		stage = new Stage();
+		Touchpad.TouchpadStyle touchpadStyle = new Touchpad.TouchpadStyle();
+		touchpad = new Touchpad(20, touchpadStyle);
+		touchpad.setBounds(15, 15, 100, 100);
+		stage.addActor(touchpad);
+
+		controller = new Controller();
 	}
 
 	@Override
@@ -77,8 +93,13 @@ public class MyGdxGame extends ApplicationAdapter {
 		batch.begin();
 		batch.draw(sprite, X, Y);
 		batch.end();
+
+		controller.draw();
+
+		stage.act(Gdx.graphics.getDeltaTime());
+		stage.draw();
 	}
-	
+
 	@Override
 	public void dispose () {
 		batch.dispose();
