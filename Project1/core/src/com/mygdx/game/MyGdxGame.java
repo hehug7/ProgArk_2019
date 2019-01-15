@@ -6,43 +6,28 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
+import com.badlogic.gdx.math.Vector2;
 
 public class MyGdxGame extends ApplicationAdapter {
 	private SpriteBatch batch;
     private Texture img;
-
-	private Stage stage;
-    private Touchpad touchpad;
-    private Skin skin;
-    Controller controller;
+    private Controller controller;
 
     // Coordinates of sprite/img
-    private int X = 0;
-    private int Y = 0;
+	private Vector2 position;
 
     // Speed/direction for sprite
-    private int DX = 0;
-    private int DY = 0;
+    private Vector2 velocity;
 
     private long currentTime = System.nanoTime();
     private long accumulator;
 
 	@Override
 	public void create () {
+		position = new Vector2(0,0);
+		velocity = new Vector2(2, 5);
 		batch = new SpriteBatch();
 		img = new Texture("heli1.png"); // Replace with heli img
-
-		/*
-		stage = new Stage();
-		Touchpad.TouchpadStyle touchpadStyle = new Touchpad.TouchpadStyle();
-		touchpad = new Touchpad(20, touchpadStyle);
-		touchpad.setBounds(15, 15, 100, 100);
-		stage.addActor(touchpad);
-		*/
-
 		controller = new Controller();
 	}
 
@@ -71,46 +56,41 @@ public class MyGdxGame extends ApplicationAdapter {
 	    while (accumulator >= nanosPerLogicTick) {
 
 	        // Checks for sprite bouncing the Vertical walls (spritelength = 162px)
-	        if (X >= Gdx.graphics.getWidth() - 162 || X < 0) {
+	        if (position.x >= Gdx.graphics.getWidth() - 162 || position.x < 0) {
 	            // Change direction X-direction
-                DX *= -1;
+                velocity.x *= -1;
             }
 
             // Checks for sprite bouncing (colliding) the horizontal walls (spritelength = 65px)
-            if (Y >= Gdx.graphics.getHeight() - 65 || Y < 0) {
+            if (position.y >= Gdx.graphics.getHeight() - 65 || position.y < 0) {
 	            // Changes direction in Y-direction
-                DY *= -1;
+                velocity.y *= -1;
             }
 
             // Apply the next coordinates to sprite
-            X += DX;
-	        Y += DY;
+            position.x += velocity.x;
+	        position.y += velocity.y;
 
 	        accumulator -= nanosPerLogicTick;
         }
 
 		// Convert to sprite and flip the image based on direction
         Sprite sprite = new Sprite(img);
-        sprite.flip(DX >= 0, false);
+        sprite.flip(velocity.x >= 0, false);
 
 		batch.begin();
-		batch.draw(sprite, X, Y);
+		batch.draw(sprite, position.x, position.y);
 		batch.end();
 
 		controller.draw();
-
-		/*
-		stage.act(Gdx.graphics.getDeltaTime());
-		stage.draw();
-		*/
 	}
 
 	public void handleInput(){
 		if(controller.isUpPressed()) {
-			DY = 2;
+			velocity.y = 2;
 		}
 		else{
-			DY = 0;
+			velocity.y = 0;
 		}
 	}
 
