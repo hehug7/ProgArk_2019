@@ -89,8 +89,20 @@ public class MyGdxGame extends ApplicationAdapter {
 		if(controller.isUpPressed()) {
 			velocity.y = 2;
 		}
+		else if(controller.isDownPressed()){
+			velocity.y = -2;
+		}
 		else{
 			velocity.y = 0;
+		}
+		if(controller.isLeftPressed()){
+			velocity.x = -2;
+		}
+		else if(controller.isRightPressed()){
+			velocity.x = 2;
+		}
+		else{
+			velocity.x = 0;
 		}
 	}
 
@@ -100,3 +112,9 @@ public class MyGdxGame extends ApplicationAdapter {
         img.dispose();
 	}
 }
+
+/* TODO
+- Helicopter doesn't keep orientation
+- Bug when pushing it against bottom, up makes it go down. Probably because of the bounce
+	implementation.
+ */
