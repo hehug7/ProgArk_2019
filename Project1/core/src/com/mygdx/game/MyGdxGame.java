@@ -24,8 +24,8 @@ public class MyGdxGame extends ApplicationAdapter {
     private int Y = 0;
 
     // Speed/direction for sprite
-    private int DX = 5;
-    private int DY = 2;
+    private int DX = 0;
+    private int DY = 0;
 
     private long currentTime = System.nanoTime();
     private long accumulator;
@@ -35,17 +35,20 @@ public class MyGdxGame extends ApplicationAdapter {
 		batch = new SpriteBatch();
 		img = new Texture("heli1.png"); // Replace with heli img
 
+		/*
 		stage = new Stage();
 		Touchpad.TouchpadStyle touchpadStyle = new Touchpad.TouchpadStyle();
 		touchpad = new Touchpad(20, touchpadStyle);
 		touchpad.setBounds(15, 15, 100, 100);
 		stage.addActor(touchpad);
+		*/
 
 		controller = new Controller();
 	}
 
 	@Override
 	public void render () {
+		handleInput();
         // Pink background to match sprite
         Gdx.gl.glClearColor(1, 0, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -96,8 +99,19 @@ public class MyGdxGame extends ApplicationAdapter {
 
 		controller.draw();
 
+		/*
 		stage.act(Gdx.graphics.getDeltaTime());
 		stage.draw();
+		*/
+	}
+
+	public void handleInput(){
+		if(controller.isUpPressed()) {
+			DY = 2;
+		}
+		else{
+			DY = 0;
+		}
 	}
 
 	@Override
