@@ -14,10 +14,10 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 // controller code and images from BrentAureli @github
 public class Controller {
-    Viewport viewport;
-    Stage stage;
-    boolean upPressed, downPressed, leftPressed, rightPressed;
-    OrthographicCamera cam;
+    private Viewport viewport;
+    private Stage stage;
+    private boolean upPressed, downPressed, leftPressed, rightPressed;
+    private OrthographicCamera cam;
 
     public boolean isUpPressed() {
         return upPressed;
