@@ -2,8 +2,10 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -12,6 +14,9 @@ public class MyGdxGame extends ApplicationAdapter {
 	private SpriteBatch batch;
     private Texture img;
     private Controller controller;
+
+    private boolean facesRight = true;
+	private BitmapFont font;
 
     // Coordinates of sprite/img
 	private Vector2 position;
@@ -29,6 +34,9 @@ public class MyGdxGame extends ApplicationAdapter {
 		batch = new SpriteBatch();
 		img = new Texture("heli1.png"); // Replace with heli img
 		controller = new Controller();
+
+		font = new BitmapFont();
+		font.setColor(Color.BLACK);
 	}
 
 	@Override
@@ -56,16 +64,22 @@ public class MyGdxGame extends ApplicationAdapter {
 	    while (accumulator >= nanosPerLogicTick) {
 
 	        // Checks for sprite bouncing the Vertical walls (spritelength = 162px)
-	        if (position.x >= Gdx.graphics.getWidth() - 162 || position.x < 0) {
-	            // Change direction X-direction
-                velocity.x *= -1;
-            }
+	        if (position.x >= Gdx.graphics.getWidth() - 162 ) {
+				// Change direction X-direction
+				position.x = Gdx.graphics.getWidth() - 162;
+			}
+			else if(position.x < 0){
+				position.x = 0;
+			}
 
             // Checks for sprite bouncing (colliding) the horizontal walls (spritelength = 65px)
-            if (position.y >= Gdx.graphics.getHeight() - 65 || position.y < 0) {
+            if (position.y >= Gdx.graphics.getHeight() - 65 ) {
 	            // Changes direction in Y-direction
-                velocity.y *= -1;
-            }
+                position.y = Gdx.graphics.getHeight() - 65;
+			}
+            else if(position.y < 0){
+				position.y =0;
+			}
 
             // Apply the next coordinates to sprite
             position.x += velocity.x;
@@ -76,13 +90,18 @@ public class MyGdxGame extends ApplicationAdapter {
 
 		// Convert to sprite and flip the image based on direction
         Sprite sprite = new Sprite(img);
-        sprite.flip(velocity.x >= 0, false);
+        sprite.flip(facesRight, false);
 
 		batch.begin();
 		batch.draw(sprite, position.x, position.y);
+		//coordinates on screen
+		font.draw(batch, "(" + position.x + ", " + position.y + ")", 20, 460);
 		batch.end();
 
 		controller.draw();
+
+
+
 	}
 
 	public void handleInput(){
@@ -96,9 +115,11 @@ public class MyGdxGame extends ApplicationAdapter {
 			velocity.y = 0;
 		}
 		if(controller.isLeftPressed()){
+			facesRight = false;
 			velocity.x = -2;
 		}
 		else if(controller.isRightPressed()){
+			facesRight = true;
 			velocity.x = 2;
 		}
 		else{
