@@ -16,7 +16,7 @@ public class Chopper {
     private Vector2 velocity;
 
     // List of image names
-    private List<String> imageNames;
+    private List<Texture> imageNames;
     private Texture img;
     private Sprite sprite;
     private SpriteBatch batch = new SpriteBatch();
@@ -25,13 +25,13 @@ public class Chopper {
     private static int counter = 0;
     private int frameIdx = 0;
 
-    Chopper(Vector2 startPos, Vector2 startVelocity, List<String> imageNames){
+    Chopper(Vector2 startPos, Vector2 startVelocity, List<Texture> imageNames){
         this.imageNames = imageNames;
         position = startPos;
         velocity = startVelocity;
 
         // Image
-        img = new Texture(imageNames.get(frameIdx));
+        img = imageNames.get(frameIdx);
         sprite = new Sprite(img);
 
         if(counter >= imageNames.size()){
@@ -45,7 +45,7 @@ public class Chopper {
         if(++frameIdx >= imageNames.size()){
             frameIdx = 0;
         }
-        img = new Texture(imageNames.get(frameIdx));
+        img = imageNames.get(frameIdx);
     }
 
     public void updatePosition(){
@@ -66,9 +66,17 @@ public class Chopper {
         return position;
     }
 
+    public Texture getImg() {
+        return img;
+    }
+
+    public Vector2 getVelocity() {
+        return velocity;
+    }
+
     public void draw(){
         // Update sprite
-        sprite = new Sprite(img);
+        sprite.setRegion(img);
         // Convert to sprite and flip the image based on direction
         sprite.flip(velocity.x >= 0, false);
 
