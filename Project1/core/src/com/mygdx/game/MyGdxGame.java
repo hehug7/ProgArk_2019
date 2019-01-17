@@ -35,7 +35,7 @@ public class MyGdxGame extends ApplicationAdapter {
                     new Vector2(i*200, 0), // Different position
                     new Vector2(i + 1, i + 1), // different directions*/
                     new Vector2(20, i*300), // Different position
-                    new Vector2(i+1, i + 1), // different directions
+                    new Vector2(i+1,  1), // different directions
                     imageNames
             );
 
@@ -90,18 +90,23 @@ public class MyGdxGame extends ApplicationAdapter {
                     if (c != chopper) {
                         if(collideX(c, chopper) && collideY(c, chopper)){
                             if(abs(c.getPosition().x - chopper.getPosition().x)
-                                    < abs(c.getPosition().y - chopper.getPosition().y)){
+                                    > abs(c.getPosition().y - chopper.getPosition().y)){
                                 c.changeDirectionY();
                                 chopper.changeDirectionY();
+                                System.out.println("Y");
                             } else if(abs(c.getPosition().x - chopper.getPosition().x)
                                     < abs(c.getPosition().y - chopper.getPosition().y)){
                                 c.changeDirectionX();
                                 chopper.changeDirectionX();
-                            } else{
+                                System.out.println("X");
+                            }
+
+                            else{
                                 c.changeDirectionX();
                                 chopper.changeDirectionX();
                                 c.changeDirectionY();
                                 chopper.changeDirectionY();
+                                System.out.println("XY");
                             }
                         }
                     }
