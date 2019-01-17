@@ -120,8 +120,6 @@ public class MyGdxGame extends ApplicationAdapter {
                         }
                     }
                 }
-
-                tempAccumulator -= nanosPerLogicTick;
             }
 
 	        tempAccumulator -= nanosPerLogicTick;
