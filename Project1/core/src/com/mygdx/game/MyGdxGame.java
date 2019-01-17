@@ -76,7 +76,7 @@ public class MyGdxGame extends ApplicationAdapter {
 	    while (tempAccumulator >= nanosPerLogicTick) {
 
 
-	        // Update position, direction and //TODO stagedraw/collisions to other choppers?
+	        // Update position, direction and collision with eachother
             for (Chopper c : choppers) {
                 // Checks for sprite bouncing the Vertical walls (spritelength = 162px)
                 if (c.getPosition().x >= Gdx.graphics.getWidth() - 162 || c.getPosition().x < 0) {
@@ -90,6 +90,7 @@ public class MyGdxGame extends ApplicationAdapter {
                     c.changeDirectionY();
                 }
 
+                // Update choppers position per timeframe
                 c.updatePosition();
 
                 //Iterate through the choppers
