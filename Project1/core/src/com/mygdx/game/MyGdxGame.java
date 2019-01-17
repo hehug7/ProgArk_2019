@@ -3,14 +3,18 @@ package com.mygdx.game;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
+import org.omg.CORBA.CharHolder;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class MyGdxGame extends ApplicationAdapter {
 	private SpriteBatch batch;
-    private Texture img;
+    private List<String> imageNames = new ArrayList<String>();
+    private List<Chopper> choppers = new ArrayList<Chopper>();
 
     // Coordinates of sprite/img
 	private Vector2 position;
@@ -20,14 +24,29 @@ public class MyGdxGame extends ApplicationAdapter {
 
     private long currentTime = System.nanoTime();
     private long accumulator;
-    private long tempAccumulator;
 
 	@Override
 	public void create () {
 		position = new Vector2(0,0);
 		velocity = new Vector2(2, 5);
 		batch = new SpriteBatch();
-		img = new Texture("heli1.png"); // Replace with heli img
+
+		// Add images to list
+		imageNames.add("heli1.png");
+		imageNames.add("heli2.png");
+		imageNames.add("heli3.png");
+		imageNames.add("heli4.png");
+
+		// Add three chopper entities
+		for (int i = 0; i < 3; i ++) {
+		    Chopper c = new Chopper(
+                new Vector2(0,0), // Different position
+                new Vector2(i+1,i+1), // different directions
+                imageNames
+            );
+
+		    choppers.add(c);
+        }
 	}
 
 	@Override
@@ -51,26 +70,29 @@ public class MyGdxGame extends ApplicationAdapter {
         currentTime = newTime;
 	    accumulator += frameTime;
 
-	    tempAccumulator = accumulator;
+	    long tempAccumulator = accumulator;
 
 	    // Checks whether it has been a change in deltatime
 	    while (tempAccumulator >= nanosPerLogicTick) {
 
-	        // Checks for sprite bouncing the Vertical walls (spritelength = 162px)
-	        if (position.x >= Gdx.graphics.getWidth() - 162 || position.x < 0) {
-				// Change direction X-direction
-				velocity.x *= -1;
-			}
 
-            // Checks for sprite bouncing (colliding) the horizontal walls (spritelength = 65px)
-            if (position.y >= Gdx.graphics.getHeight() - 65 || position.y < 0) {
-	            // Changes direction in Y-direction
-                velocity.y *= -1;
-			}
+	        // Update position, direction and //TODO stagedraw/collisions to other choppers?
+            for (Chopper c : choppers) {
+                // Checks for sprite bouncing the Vertical walls (spritelength = 162px)
+                if (c.getPosition().x >= Gdx.graphics.getWidth() - 162 || c.getPosition().x < 0) {
+                    // Change direction X-direction
+                    c.changeDirectionX();
+                }
 
-            // Apply the next coordinates to sprite
-            position.x += velocity.x;
-	        position.y += velocity.y;
+                // Checks for sprite bouncing (colliding) the horizontal walls (spritelength = 65px)
+                if (c.getPosition().y >= Gdx.graphics.getHeight() - 65 || c.getPosition().y < 0) {
+                    // Changes direction in Y-direction
+                    c.changeDirectionY();
+                }
+
+                c.updatePosition();
+
+            }
 
 	        tempAccumulator -= nanosPerLogicTick;
         }
@@ -78,23 +100,23 @@ public class MyGdxGame extends ApplicationAdapter {
         // Checks whether to update animation
 		while(accumulator >= nanosPerAnimationTick){
 			// For helicopters in list
-			// heli.updateAnimation();
+            for (Chopper c : choppers) {
+                c.updateAnimation();
+            }
+            accumulator -= nanosPerAnimationTick;
 		}
 
-
-		// Convert to sprite and flip the image based on direction
-        Sprite sprite = new Sprite(img);
-        sprite.flip(velocity.x >= 0, false);
-
-		batch.begin();
-		batch.draw(sprite, position.x, position.y);
-		batch.end();
-		//TODO add helicopter to stage
+		// Draw choppers
+		for (Chopper c : choppers) {
+            c.draw();
+        }
 	}
 
 	@Override
 	public void dispose () {
-		batch.dispose();
-        img.dispose();
+        // Draw choppers
+        for (Chopper c : choppers) {
+            c.dispose();
+        }
 	}
 }

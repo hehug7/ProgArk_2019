@@ -1,5 +1,9 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.ArrayList;
@@ -14,36 +18,42 @@ public class Chopper {
     private Vector2 velocity;
 
     // List of image names
-    private List<String> imageNames = new ArrayList<String>();
+    private List<String> imageNames;
+    private Texture img;
+    private Sprite sprite;
+    private SpriteBatch batch = new SpriteBatch();
 
     //Determines starting frame of animation
     private static int counter = 0;
-    private int frame = 0;
+    private int frameIdx = 0;
 
-    Chopper(Vector2 startPos, Vector2 startVelocity){
-        imageNames.add("heli1.png");
-        imageNames.add("heli2.png");
-        imageNames.add("heli3.png");
-        imageNames.add("heli4.png");
-
+    Chopper(Vector2 startPos, Vector2 startVelocity, List<String> imageNames){
+        this.imageNames = imageNames;
         position = startPos;
         velocity = startVelocity;
+
+        // Image
+        img = new Texture(imageNames.get(frameIdx));
+        sprite = new Sprite(img);
 
         if(counter >= imageNames.size()){
             counter = 0;
         }
-        frame = counter++;
+        frameIdx = counter++;
     }
 
     //Update position and animation
     public void updateAnimation(){
-        if(++frame >= imageNames.size()){
-            frame = 0;
+        if(++frameIdx >= imageNames.size()){
+            frameIdx = 0;
         }
+        img = new Texture(imageNames.get(frameIdx));
     }
 
     public void updatePosition(){
-        //TODO
+        position = new Vector2(position.x + velocity.x, position.y + velocity.y);
+
+        // TODO dobble check collision to wall
     }
 
     public void changeDirectionX(){
@@ -59,6 +69,19 @@ public class Chopper {
     }
 
     public void draw(){
-        //TODO
+        // Update sprite
+        sprite = new Sprite(img);
+        // Convert to sprite and flip the image based on direction
+        sprite.flip(velocity.x >= 0, false);
+
+        batch.begin();
+        batch.draw(sprite, position.x, position.y);
+        batch.end();
+
+    }
+
+    public void dispose() {
+        batch.dispose();
+        img.dispose();
     }
 }
