@@ -92,6 +92,48 @@ public class MyGdxGame extends ApplicationAdapter {
 
                 c.updatePosition();
 
+                //Iterate through the choppers
+                for (Chopper chopper : choppers) {
+                    //Don't compare with self
+                    if (c != chopper) {
+                        // Check if collision
+                        if(collideX(c, chopper) && collideY(c, chopper)){
+
+                            // Check wether the entities goes the same direction (X)
+                            if (c.getVelocity().x * chopper.getVelocity().x > 0) {
+                                // Change direction of the chopper that is coming from behind if
+                                // they collide in the same direction
+                                if (c.getVelocity().x > 0 && c.getPosition().x > chopper.getPosition().x) {
+                                    chopper.changeDirectionX();
+                                } else {
+                                    c.changeDirectionX();
+                                }
+                            } else { // If they collide when going in opposite direction, change direction of both
+                                chopper.changeDirectionX();
+                                c.changeDirectionX();
+                            }
+
+                            // Same for Y
+                            // Check wether the entities goes the same direction (Y)
+                            if (c.getVelocity().y * chopper.getVelocity().y > 0) {
+                                // Change direction of the chopper that is coming from "behind" if
+                                // they collide in the same direction on the Y-axis
+                                if (c.getVelocity().y > 0 && c.getPosition().y > chopper.getPosition().y) {
+                                    chopper.changeDirectionY();
+                                } else {
+                                    c.changeDirectionY();
+                                }
+                            } else {
+                                // If they collide in opposite direction, change both
+                                chopper.changeDirectionY();
+                                c.changeDirectionY();
+                            }
+                        }
+                    }
+                }
+
+
+                tempAccumulator -= nanosPerLogicTick;
             }
 
 	        tempAccumulator -= nanosPerLogicTick;
@@ -112,11 +154,23 @@ public class MyGdxGame extends ApplicationAdapter {
         }
 	}
 
-	@Override
-	public void dispose () {
-        // Draw choppers
+    @Override
+    public void dispose() {
+        // Dispose choppers
         for (Chopper c : choppers) {
             c.dispose();
         }
-	}
+    }
+
+    // Check for overlap in x-direction
+    private boolean collideX(Chopper chopper1, Chopper chopper2) {
+        return (chopper1.getPosition().x >= chopper2.getPosition().x
+                && chopper1.getPosition().x <= chopper2.getPosition().x + chopper2.getImg().getWidth());
+    }
+
+    // Check for overlap in y-direction
+    private boolean collideY(Chopper chopper1, Chopper chopper2) {
+        return (chopper1.getPosition().y >= chopper2.getPosition().y
+                && chopper1.getPosition().y <= chopper2.getPosition().y + chopper2.getImg().getHeight());
+    }
 }
