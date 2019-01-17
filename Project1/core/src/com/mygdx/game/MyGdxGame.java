@@ -6,30 +6,18 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
-import org.omg.CORBA.CharHolder;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class MyGdxGame extends ApplicationAdapter {
-	private SpriteBatch batch;
     private List<String> imageNames = new ArrayList<String>();
     private List<Chopper> choppers = new ArrayList<Chopper>();
-
-    // Coordinates of sprite/img
-	private Vector2 position;
-
-    // Speed/direction for sprite
-    private Vector2 velocity;
 
     private long currentTime = System.nanoTime();
     private long accumulator;
 
 	@Override
 	public void create () {
-		position = new Vector2(0,0);
-		velocity = new Vector2(2, 5);
-		batch = new SpriteBatch();
 
 		// Add images to list
 		imageNames.add("heli1.png");
@@ -76,7 +64,7 @@ public class MyGdxGame extends ApplicationAdapter {
 	    while (tempAccumulator >= nanosPerLogicTick) {
 
 
-	        // Update position, direction and //TODO stagedraw/collisions to other choppers?
+	        // Update position, direction and detect and correct for collision
             for (Chopper c : choppers) {
                 // Checks for sprite bouncing the Vertical walls (spritelength = 162px)
                 if (c.getPosition().x >= Gdx.graphics.getWidth() - 162 || c.getPosition().x < 0) {
@@ -91,6 +79,7 @@ public class MyGdxGame extends ApplicationAdapter {
                 }
 
                 c.updatePosition();
+                //TODO add collision detect and correct
 
             }
 
