@@ -4,7 +4,6 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.ArrayList;
@@ -28,11 +27,9 @@ public class MyGdxGame extends ApplicationAdapter {
 
         // Add three chopper entities
         for (int i = 0; i < 3; i++) {
-            Chopper c = new Chopper(/*
-                    new Vector2(i*200, 0), // Different position
-                    new Vector2(i + 1, i + 1), // different directions*/
+            Chopper c = new Chopper(
                     new Vector2(i*70, i*200), // Different position
-                    new Vector2(1,  1), // different directions
+                    new Vector2(1,  1),
                     imageNames
             );
 

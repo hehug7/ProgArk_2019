@@ -81,7 +81,6 @@ public class Chopper {
         batch.begin();
         batch.draw(sprite, position.x, position.y);
         batch.end();
-
     }
 
     public void dispose() {
