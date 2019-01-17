@@ -3,51 +3,42 @@ package com.mygdx.game;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-
-import org.omg.CORBA.CharHolder;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MyGdxGame extends ApplicationAdapter {
-	private SpriteBatch batch;
-    private List<String> imageNames = new ArrayList<String>();
     private List<Chopper> choppers = new ArrayList<Chopper>();
-
-    // Coordinates of sprite/img
-	private Vector2 position;
-
-    // Speed/direction for sprite
-    private Vector2 velocity;
-
+    private List<Texture> imageNames = new ArrayList<Texture>();
     private long currentTime = System.nanoTime();
     private long accumulator;
 
-	@Override
-	public void create () {
-		position = new Vector2(0,0);
-		velocity = new Vector2(2, 5);
-		batch = new SpriteBatch();
+    @Override
+    public void create() {
 
-		// Add images to list
-		imageNames.add("heli1.png");
-		imageNames.add("heli2.png");
-		imageNames.add("heli3.png");
-		imageNames.add("heli4.png");
+        // Add images to list
+        imageNames.add(new Texture("heli1.png"));
+        imageNames.add(new Texture("heli2.png"));
+        imageNames.add(new Texture("heli3.png"));
+        imageNames.add(new Texture("heli4.png"));
 
-		// Add three chopper entities
-		for (int i = 0; i < 3; i ++) {
-		    Chopper c = new Chopper(
-                new Vector2(0,0), // Different position
-                new Vector2(i+1,i+1), // different directions
-                imageNames
+
+        // Add three chopper entities
+        for (int i = 0; i < 3; i++) {
+            Chopper c = new Chopper(/*
+                    new Vector2(i*200, 0), // Different position
+                    new Vector2(i + 1, i + 1), // different directions*/
+                    new Vector2(i*70, i*200), // Different position
+                    new Vector2(1,  1), // different directions
+                    imageNames
             );
 
-		    choppers.add(c);
+            choppers.add(c);
         }
-	}
+    }
 
 	@Override
 	public void render () {
@@ -132,7 +123,6 @@ public class MyGdxGame extends ApplicationAdapter {
                         }
                     }
                 }
-
 
                 tempAccumulator -= nanosPerLogicTick;
             }
