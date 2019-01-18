@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.math.Vector2;
 
 /* PONG
 Make a ball, score, two bars and one controller.
@@ -18,10 +19,12 @@ public class MyGdxGame extends ApplicationAdapter {
     private long accumulator;
 
     private Controller controller;
+    private Ball ball;
 
     @Override
     public void create() {
         controller = new Controller();
+        ball = new Ball(10, 10, Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 1, 1);
     }
 
 	@Override
@@ -31,7 +34,6 @@ public class MyGdxGame extends ApplicationAdapter {
 	    long newTime = System.nanoTime();
 	    long frameTime = newTime - currentTime;
         long nanosPerLogicTick = 25000000;
-        long nanosPerAnimationTick = 100000000;
 
         // Prevent overflow (infinite while loop)
 	    if (frameTime > nanosPerLogicTick) {
@@ -41,14 +43,18 @@ public class MyGdxGame extends ApplicationAdapter {
         currentTime = newTime;
 	    accumulator += frameTime;
 
-	    long tempAccumulator = accumulator;
+        while(accumulator >= nanosPerLogicTick){
+            ball.updatePosition();
+            accumulator -= nanosPerLogicTick;
+        }
 
 	    //Rendering
         Gdx.gl.glClearColor(1, 0, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         controller.draw();
-	}
+        ball.draw();
+    }
 
     @Override
     public void dispose() {

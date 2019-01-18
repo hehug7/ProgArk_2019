@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+//A controller with up- and down arrows for controlling the player bar.
 
 // controller code and images from BrentAureli @github
 public class Controller {
