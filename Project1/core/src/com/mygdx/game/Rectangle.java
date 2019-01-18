@@ -11,7 +11,8 @@ class Rectangle {
     private Vector2 position;
     private Vector2 velocity;
 
-    Rectangle(int sizeX, int sizeY, int positionX, int positionY, int velocityX, int velocityY){
+    Rectangle(float sizeX, float sizeY, float positionX, float positionY, float velocityX,
+              float velocityY){
         size = new Vector2(sizeX, sizeY);
         position = new Vector2(positionX, positionY);
         velocity = new Vector2(velocityX, velocityY);

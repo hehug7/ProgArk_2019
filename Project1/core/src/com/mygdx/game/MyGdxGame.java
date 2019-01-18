@@ -2,7 +2,10 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 /* PONG
@@ -16,7 +19,7 @@ Right bar is simple AI with max speed that centers bar on the y-coordinate of th
  */
 public class MyGdxGame extends ApplicationAdapter {
 
-    //Rendering variables
+    //Rendering loop variables
     private long currentTime = System.nanoTime();
     private long accumulator;
 
@@ -28,13 +31,26 @@ public class MyGdxGame extends ApplicationAdapter {
 
     private Vector2 score = new Vector2(0,0);
     private float playerSpeed = 2;
+    private Vector2 startingPosition;
+    private Vector2 startingVelocity;
+
+    private SpriteBatch batch;
+    private BitmapFont font;
 
     @Override
     public void create() {
+        startingPosition = new Vector2(Gdx.graphics.getWidth()/2,
+                Gdx.graphics.getHeight()/2);
+        startingVelocity =  new Vector2(1,3);
+
         controller = new Controller();
-        ball = new Rectangle(10, 10, Gdx.graphics.getWidth()/2,
-                Gdx.graphics.getHeight()/2, 1, 3);
+        ball = new Rectangle(10, 10, startingPosition.x,
+                startingPosition.y, startingVelocity.x, startingVelocity.y);
         player = new Rectangle(10, 150, 0, 0, 0, 0);
+
+        batch = new SpriteBatch();
+        font = new BitmapFont();
+        font.setColor(Color.BLACK);
     }
 
 	@Override
@@ -60,10 +76,11 @@ public class MyGdxGame extends ApplicationAdapter {
             ball.updatePosition();
             player.updatePosition();
 
+            checkForScore();
+
             //TODO update position of AI bar
             //TODO check ball for collision with bar and update its x-velocity
             //TODO more advanced, update ball's y-velocity based on y-velocity of bar
-            //TODO check ball for scoring and reset
 
             accumulator -= nanosPerLogicTick;
         }
@@ -75,6 +92,12 @@ public class MyGdxGame extends ApplicationAdapter {
         controller.draw();
         ball.draw();
         player.draw();
+
+        //Score
+        batch.begin();
+        font.draw(batch,  (int)score.x + " - " + (int)score.y,Gdx.graphics.getWidth()/2 - 10,
+                Gdx.graphics.getHeight() - 10);
+        batch.end();
     }
 
     //Handle controller input for the player bar
@@ -90,10 +113,26 @@ public class MyGdxGame extends ApplicationAdapter {
         }
     }
 
+    public void checkForScore(){
+        if(ball.getPosition().x < 0){
+            score.x += 1;
+            ball.setPosition(startingPosition);
+            ball.setVelocityY(startingVelocity.y);
+        }
+        else if(ball.getPosition().x > Gdx.graphics.getWidth() - ball.getSize().x){
+            score.y += 1;
+            ball.setPosition(startingPosition);
+            ball.setVelocityY(startingVelocity.y);
+        }
+    }
+
     @Override
     public void dispose() {
         controller.dispose();
         ball.dispose();
         player.dispose();
+        batch.dispose();
+        font.dispose();
+        opponent.dispose();
     }
 }
