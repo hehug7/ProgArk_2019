@@ -48,15 +48,28 @@ class Rectangle {
     }
 
     public void setPosition(Vector2 position) {
-        this.position = position;
+        this.position.x = position.x;
+        this.position.y = position.y;
+    }
+
+    public Vector2 getVelocity() {
+        return velocity;
     }
 
     public void changeVelocityY(){
         velocity.y *= -1;
     }
 
+    public void changeVelocityX(){
+        velocity.x *= -1;
+    }
+
     public void setVelocityY(float velocityY){
         velocity.y = velocityY;
+    }
+
+    public void setVelocityX(float velocityX) {
+        velocity.x = velocityX;
     }
 
     public Vector2 getSize() {

@@ -68,7 +68,7 @@ public class Controller {
         });
 
         table.add(upImage).size(upImage.getWidth(), upImage.getHeight());
-        table.row().pad(5,5,5,5);
+        table.row().pad(20,20,20,20);
         table.add(downImage).size(downImage.getWidth(), downImage.getHeight());
 
         stage.addActor(table);
@@ -76,10 +76,6 @@ public class Controller {
 
     public void draw(){
         stage.draw();
-    }
-
-    public void resize(int width, int height){
-        viewport.update(width, height);
     }
 
     public void dispose(){
