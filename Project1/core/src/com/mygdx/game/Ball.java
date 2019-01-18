@@ -28,4 +28,20 @@ class Ball {
         position.x += velocity.x;
         position.y += velocity.y;
     }
+
+    public Vector2 getPosition() {
+        return position;
+    }
+
+    public void setPosition(Vector2 position) {
+        this.position = position;
+    }
+
+    public void changeVelocityY(){
+        velocity.y *= -1;
+    }
+
+    public void dispose(){
+        shapeRenderer.dispose();
+    }
 }

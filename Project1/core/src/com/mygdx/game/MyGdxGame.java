@@ -24,7 +24,8 @@ public class MyGdxGame extends ApplicationAdapter {
     @Override
     public void create() {
         controller = new Controller();
-        ball = new Ball(10, 10, Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 1, 1);
+        ball = new Ball(10, 10, Gdx.graphics.getWidth()/2,
+                Gdx.graphics.getHeight()/2, 1, 3);
     }
 
 	@Override
@@ -44,7 +45,17 @@ public class MyGdxGame extends ApplicationAdapter {
 	    accumulator += frameTime;
 
         while(accumulator >= nanosPerLogicTick){
+            //Check for roof/floor collision
             ball.updatePosition();
+            if(ball.getPosition().y <= 0){
+                ball.setPosition(new Vector2(ball.getPosition().x, 0));
+                ball.changeVelocityY();
+            }
+            else if(ball.getPosition().y >= Gdx.graphics.getHeight()){
+                ball.setPosition(new Vector2(ball.getPosition().x, Gdx.graphics.getHeight()));
+                ball.changeVelocityY();
+            }
+
             accumulator -= nanosPerLogicTick;
         }
 
@@ -59,5 +70,6 @@ public class MyGdxGame extends ApplicationAdapter {
     @Override
     public void dispose() {
         controller.dispose();
+        ball.dispose();
     }
 }
