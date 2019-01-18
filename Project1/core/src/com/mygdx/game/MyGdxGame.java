@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 
 /* PONG
 Make a ball, score, two bars and one controller.
-The bars and controller behave differently -> split into two classes.
+Ball and bars are similar enough to use the same general class Rectangle.
 Ball bounces off floor, ceiling and bars.
 Game checks if someone scored by checking the x-coordinate of the ball against the borders of the
     screen, if so it updates the score and re-spawns the ball.
@@ -15,17 +15,24 @@ Controller controls left bar.
 Right bar is simple AI with max speed that centers bar on the y-coordinate of the ball
  */
 public class MyGdxGame extends ApplicationAdapter {
+
+    //Rendering variables
     private long currentTime = System.nanoTime();
     private long accumulator;
 
+    //Game variables and actors
     private Controller controller;
-    private Ball ball;
+    private Rectangle ball;
+    private Rectangle player;
+    private Rectangle opponent;
+    private Vector2 score = new Vector2(0,0);
 
     @Override
     public void create() {
         controller = new Controller();
-        ball = new Ball(10, 10, Gdx.graphics.getWidth()/2,
+        ball = new Rectangle(10, 10, Gdx.graphics.getWidth()/2,
                 Gdx.graphics.getHeight()/2, 1, 3);
+        player = new Rectangle(10, 150, 0, 0, 0, 0);
     }
 
 	@Override
@@ -45,8 +52,10 @@ public class MyGdxGame extends ApplicationAdapter {
 	    accumulator += frameTime;
 
         while(accumulator >= nanosPerLogicTick){
-            //Check for roof/floor collision
+
             ball.updatePosition();
+
+            //Check ball for roof/floor collision
             if(ball.getPosition().y <= 0){
                 ball.setPosition(new Vector2(ball.getPosition().x, 0));
                 ball.changeVelocityY();
@@ -55,6 +64,13 @@ public class MyGdxGame extends ApplicationAdapter {
                 ball.setPosition(new Vector2(ball.getPosition().x, Gdx.graphics.getHeight()));
                 ball.changeVelocityY();
             }
+
+            //TODO update position of player bar based on velocity/controller input
+            //TODO update position of AI bar
+            //TODO check bars for collision with floor and roof
+            //TODO check ball for collision with bar and update its x-velocity
+            //TODO more advanced, update ball's y-velocity based on y-velocity of bar
+            //TODO check ball for scoring and reset
 
             accumulator -= nanosPerLogicTick;
         }
@@ -65,11 +81,13 @@ public class MyGdxGame extends ApplicationAdapter {
 
         controller.draw();
         ball.draw();
+        player.draw();
     }
 
     @Override
     public void dispose() {
         controller.dispose();
         ball.dispose();
+        player.dispose();
     }
 }
