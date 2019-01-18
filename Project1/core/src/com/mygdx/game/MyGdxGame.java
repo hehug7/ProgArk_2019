@@ -41,7 +41,7 @@ public class MyGdxGame extends ApplicationAdapter {
     public void create() {
         startingPosition = new Vector2(Gdx.graphics.getWidth()/2,
                 Gdx.graphics.getHeight()/2);
-        startingVelocity =  new Vector2(1,3);
+        startingVelocity =  new Vector2(-1,-3);
 
         controller = new Controller();
         ball = new Rectangle(10, 10, startingPosition.x,
@@ -78,8 +78,8 @@ public class MyGdxGame extends ApplicationAdapter {
 
             checkForScore();
 
+            //TODO check ball for collision with bar and flip its x-velocity
             //TODO update position of AI bar
-            //TODO check ball for collision with bar and update its x-velocity
             //TODO more advanced, update ball's y-velocity based on y-velocity of bar
 
             accumulator -= nanosPerLogicTick;
@@ -124,6 +124,22 @@ public class MyGdxGame extends ApplicationAdapter {
             ball.setPosition(startingPosition);
             ball.setVelocityY(startingVelocity.y);
         }
+    }
+
+    public void ballCollision(){
+
+    }
+
+    // Check for overlap in x-direction
+    private boolean collideX(Rectangle chopper1, Rectangle chopper2) {
+        return (chopper1.getPosition().x >= chopper2.getPosition().x
+                && chopper1.getPosition().x <= chopper2.getPosition().x + chopper2.getSize().x);
+    }
+
+    // Check for overlap in y-direction
+    private boolean collideY(Rectangle chopper1, Rectangle chopper2) {
+        return (chopper1.getPosition().y >= chopper2.getPosition().y
+                && chopper1.getPosition().y <= chopper2.getPosition().y + chopper2.getSize().y);
     }
 
     @Override
