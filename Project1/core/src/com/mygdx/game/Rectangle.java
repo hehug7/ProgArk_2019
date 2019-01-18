@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -24,9 +25,21 @@ class Rectangle {
         shapeRenderer.end();
     }
 
+    /*Increments the position with speed, checks for collision with roof and floor, sets position
+    and flips y-velocity accordingly
+     */
     public void updatePosition(){
         position.x += velocity.x;
         position.y += velocity.y;
+
+        if(position.y <= 0){
+            setPosition(new Vector2(position.x, 0));
+            changeVelocityY();
+        }
+        else if(position.y >= Gdx.graphics.getHeight() - size.y){
+            setPosition(new Vector2(position.x, Gdx.graphics.getHeight() - size.y));
+            changeVelocityY();
+        }
     }
 
     public Vector2 getPosition() {
@@ -43,6 +56,10 @@ class Rectangle {
 
     public void setVelocityY(float velocityY){
         velocity.y = velocityY;
+    }
+
+    public Vector2 getSize() {
+        return size;
     }
 
     public void dispose(){

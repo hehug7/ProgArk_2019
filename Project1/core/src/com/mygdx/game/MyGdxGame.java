@@ -25,7 +25,9 @@ public class MyGdxGame extends ApplicationAdapter {
     private Rectangle ball;
     private Rectangle player;
     private Rectangle opponent;
+
     private Vector2 score = new Vector2(0,0);
+    private float playerSpeed = 2;
 
     @Override
     public void create() {
@@ -53,21 +55,12 @@ public class MyGdxGame extends ApplicationAdapter {
 
         while(accumulator >= nanosPerLogicTick){
 
+            handleInput();
+
             ball.updatePosition();
+            player.updatePosition();
 
-            //Check ball for roof/floor collision
-            if(ball.getPosition().y <= 0){
-                ball.setPosition(new Vector2(ball.getPosition().x, 0));
-                ball.changeVelocityY();
-            }
-            else if(ball.getPosition().y >= Gdx.graphics.getHeight()){
-                ball.setPosition(new Vector2(ball.getPosition().x, Gdx.graphics.getHeight()));
-                ball.changeVelocityY();
-            }
-
-            //TODO update position of player bar based on velocity/controller input
             //TODO update position of AI bar
-            //TODO check bars for collision with floor and roof
             //TODO check ball for collision with bar and update its x-velocity
             //TODO more advanced, update ball's y-velocity based on y-velocity of bar
             //TODO check ball for scoring and reset
@@ -82,6 +75,19 @@ public class MyGdxGame extends ApplicationAdapter {
         controller.draw();
         ball.draw();
         player.draw();
+    }
+
+    //Handle controller input for the player bar
+    public void handleInput(){
+        if(controller.isUpPressed()) {
+            player.setVelocityY(playerSpeed);
+        }
+        else if(controller.isDownPressed()){
+            player.setVelocityY(-playerSpeed);
+        }
+        else{
+            player.setVelocityY(0);
+        }
     }
 
     @Override
