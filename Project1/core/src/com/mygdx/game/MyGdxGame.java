@@ -8,8 +8,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
-import org.w3c.dom.css.Rect;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,17 +32,15 @@ public class MyGdxGame extends ApplicationAdapter {
     private Rectangle player;
     private Rectangle opponent;
 
+    private Score score;
+
     // List of bars
     private List<Rectangle> bars = new ArrayList<Rectangle>();
 
-    private Vector2 score = new Vector2(0,0);
     private float playerSpeed = 2;
     private float opponentSpeed = 1;
     private Vector2 startingPosition;
     private Vector2 startingVelocity;
-
-    private SpriteBatch batch;
-    private BitmapFont font;
 
     @Override
     public void create() {
@@ -72,13 +68,12 @@ public class MyGdxGame extends ApplicationAdapter {
                 startingPosition.y-75,
                 0, 0);
 
-        batch = new SpriteBatch();
-        font = new BitmapFont();
-        font.setColor(Color.BLACK);
-
         // adds player and opponent to ball colliding elements
         bars.add(player);
         bars.add(opponent);
+
+        // Score
+        score = new Score();
     }
 
 	@Override
@@ -148,12 +143,7 @@ public class MyGdxGame extends ApplicationAdapter {
         ball.draw();
         player.draw();
         opponent.draw();
-
-        //Score
-        batch.begin();
-        font.draw(batch,  (int)score.y + " - " + (int)score.x,Gdx.graphics.getWidth()/2 - 10,
-                Gdx.graphics.getHeight() - 10);
-        batch.end();
+        score.draw();
     }
 
     //Handle controller input for the player bar
@@ -173,13 +163,13 @@ public class MyGdxGame extends ApplicationAdapter {
     // Increment AI's speed depending on player's amount of goals.
     public void checkForScore(){
         if(ball.getPosition().x < 0){
-            score.x++;
+            score.incrementX();
             ball.setPosition(startingPosition);
             ball.setVelocityX(startingVelocity.x);
             ball.setVelocityY(startingVelocity.y);
         }
         else if(ball.getPosition().x > Gdx.graphics.getWidth() - ball.getSize().x){
-            score.y++;
+            score.incrementY();
             opponentSpeed++;
             ball.setPosition(startingPosition);
             ball.setVelocityX(startingVelocity.x);
@@ -204,8 +194,7 @@ public class MyGdxGame extends ApplicationAdapter {
         controller.dispose();
         ball.dispose();
         player.dispose();
-        batch.dispose();
-        font.dispose();
+        score.dispose();
         opponent.dispose();
     }
 }
