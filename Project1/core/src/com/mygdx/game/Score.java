@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 // Keeps track of and draws the score, implemented as a singleton
-public class Score {
+public class Score extends AbstractScore{
     private Vector2 scoreValues = new Vector2(0,0);
     private SpriteBatch batch;
     private BitmapFont font;
