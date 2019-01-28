@@ -73,7 +73,7 @@ public class MyGdxGame extends ApplicationAdapter {
         bars.add(opponent);
 
         // Score
-        score = new Score();
+        score = score.getScore();
     }
 
 	@Override
